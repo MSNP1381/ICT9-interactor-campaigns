@@ -174,6 +174,9 @@
     },
 
     async getDeviceId() {
+      if (localStorage.getItem("client_refrence_id")) {
+        return localStorage.getItem("client_refrence_id");
+      }
       const canvas = document.createElement("canvas");
       const gl = canvas.getContext("webgl");
       const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
