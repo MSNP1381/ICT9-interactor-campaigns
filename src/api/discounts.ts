@@ -22,6 +22,10 @@ export interface CreateDiscountData {
   campaign_id: string;
 }
 
+export interface BulkDiscountCodeCreate {
+  discount_codes: CreateDiscountData[];
+}
+
 export const getDiscounts = async () => {
   const response = await api.get<Discount[]>("/discounts");
   return response.data;
@@ -49,9 +53,10 @@ export const deleteDiscount = async (id: string) => {
   await api.delete(`/discounts/${id}`);
 };
 
-export const createBulkDiscounts = async (
-  discounts: CreateDiscountData[],
-): Promise<void> => {
-  const response = await api.post("/discount-codes/bulk", { discounts });
+export const createBulkDiscounts = async (discountCodes: CreateDiscountData[]) => {
+  const bulkData: BulkDiscountCodeCreate = {
+    discount_codes: discountCodes
+  };
+  const response = await api.post<DiscountCode[]>("/discount-codes/bulk", bulkData);
   return response.data;
 };

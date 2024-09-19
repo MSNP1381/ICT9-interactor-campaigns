@@ -35,7 +35,7 @@ describe('DiscountCreator', () => {
   });
 
   it('submits the form with correct data', async () => {
-    mockCreateBulkDiscounts.mockResolvedValue(undefined);
+    mockCreateBulkDiscounts.mockResolvedValue([]);
 
     render(<Form><DiscountCreator /></Form>);
 
@@ -51,15 +51,17 @@ describe('DiscountCreator', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Generate Bulk Discounts' }));
 
     await waitFor(() => {
-      expect(mockCreateBulkDiscounts).toHaveBeenCalledWith(expect.arrayContaining([
-        expect.objectContaining({
-          code: 'TEST-0001',
-          discount_value: 10,
-          discount_type: 'percentage',
-          max_uses: 100,
-          campaign_id: '1',
-        }),
-      ]));
+      expect(mockCreateBulkDiscounts).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'TEST-0001',
+            discount_value: 10,
+            discount_type: 'percentage',
+            max_uses: 100,
+            campaign_id: '1',
+          }),
+        ])
+      );
     });
   });
 });

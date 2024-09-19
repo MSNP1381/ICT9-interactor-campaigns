@@ -17,7 +17,8 @@ export interface WidgetCreate {
   host_id: string;
   config: string;
   widget_template_id: string;
-  campaign_id: string; // Add this line
+  campaign_id: string;
+  widget_type: string; // Add this line
 }
 
 export interface WidgetUpdate {

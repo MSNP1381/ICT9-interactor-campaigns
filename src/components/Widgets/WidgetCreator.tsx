@@ -8,6 +8,7 @@ import {
 } from "../../api/widgetTemplates";
 import nunjucks from "nunjucks";
 import { getCampaigns, Campaign } from "../../api/campaigns";
+import CustomTemplateCreator from "./CustomTemplateCreator";
 
 const { Option } = Select;
 
@@ -16,7 +17,8 @@ interface WidgetFormValues {
   widget_template_id: string;
   config: string;
   description: string;
-  campaign_id: string; // Add this line
+  campaign_id: string;
+  widget_type: string;
 }
 
 interface WidgetCreatorProps {
@@ -35,6 +37,11 @@ const WidgetCreator: React.FC<WidgetCreatorProps> = ({ onWidgetCreated }) => {
     useState<WidgetTemplate | null>(null);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isCampaignsLoading, setIsCampaignsLoading] = useState(true);
+  const [customTemplate, setCustomTemplate] = useState<string>("");
+  const [extractedVariables, setExtractedVariables] = useState<string[]>([]);
+  const [isCustomTemplateModalVisible, setIsCustomTemplateModalVisible] = useState(false);
+
+  const widgetTypes = ['game', 'survey', 'quiz', 'form', 'calculator'];
 
   useEffect(() => {
     fetchTemplates();
@@ -83,13 +90,14 @@ const WidgetCreator: React.FC<WidgetCreatorProps> = ({ onWidgetCreated }) => {
         config: JSON.parse(values.config),
         host_id: localStorage.getItem("defaultHostId") ?? "",
         widget_template_id: values.widget_template_id,
-        campaign_id: values.campaign_id, // Add this line
+        campaign_id: values.campaign_id,
+        widget_type: values.widget_type,
       };
       await createWidget(widgetCreateData);
       message.success("Widget created successfully");
       form.resetFields();
       setSelectedTemplate(null);
-      onWidgetCreated(); // Call this function to trigger a refresh
+      onWidgetCreated();
     } catch (error) {
       console.error("Error creating widget:", error);
       message.error("Failed to create widget");
@@ -137,6 +145,16 @@ const WidgetCreator: React.FC<WidgetCreatorProps> = ({ onWidgetCreated }) => {
 
   const handleTestModalCancel = () => {
     setIsTestModalVisible(false);
+  };
+
+  const handleCustomTemplateCreated = (newTemplate: WidgetTemplate) => {
+    setTemplates([...templates, newTemplate]);
+    setSelectedTemplate(newTemplate);
+    form.setFieldsValue({
+      widget_template_id: newTemplate.id,
+      config: JSON.stringify(newTemplate.config, null, 2),
+    });
+    setIsCustomTemplateModalVisible(false);
   };
 
   return (
@@ -228,6 +246,9 @@ const WidgetCreator: React.FC<WidgetCreatorProps> = ({ onWidgetCreated }) => {
           <Button onClick={handleTestWidget} style={{ marginLeft: 8 }}>
             Test Widget
           </Button>
+          <Button onClick={() => setIsCustomTemplateModalVisible(true)} style={{ marginLeft: 8 }}>
+            Create Custom Template
+          </Button>
         </Form.Item>
       </Form>
 
@@ -250,6 +271,16 @@ const WidgetCreator: React.FC<WidgetCreatorProps> = ({ onWidgetCreated }) => {
           sandbox="allow-scripts"
           title="Widget Preview"
         />
+      </Modal>
+
+      <Modal
+        title="Create Custom Template"
+        visible={isCustomTemplateModalVisible}
+        onCancel={() => setIsCustomTemplateModalVisible(false)}
+        footer={null}
+        width={800}
+      >
+        <CustomTemplateCreator onTemplateCreated={handleCustomTemplateCreated} />
       </Modal>
     </>
   );

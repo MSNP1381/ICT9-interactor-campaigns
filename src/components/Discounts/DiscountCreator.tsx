@@ -9,14 +9,12 @@ import {
   message,
   Spin,
 } from "antd";
-import {
-  CreateDiscountData,
-  createBulkDiscounts,
-} from "../../api/discounts";
+import { createBulkDiscounts } from "../../api/discounts";
 import { getCampaigns, Campaign } from "../../api/campaigns";
 import moment from "moment";
 
-interface DiscountFormData extends Omit<CreateDiscountData, "expiration_date"> {
+interface DiscountFormData {
+  code_prefix: string;
   discount_value: number;
   discount_type: "percentage" | "fixed_amount" | "free_shipping";
   max_uses?: number;
@@ -52,23 +50,18 @@ const DiscountCreator: React.FC = () => {
   const generateBulkDiscounts = async (values: DiscountFormData) => {
     setLoading(true);
     try {
-      const baseDiscountData: Omit<CreateDiscountData, "code"> = {
+      const bulkDiscounts:any = {
+        code: `${values.code_prefix}-`,
         discount_value: values.discount_value,
         discount_type: values.discount_type,
         max_uses: values.max_uses,
         expiration_date: values.expiration_date?.format("YYYY-MM-DD"),
         is_active: true,
         campaign_id: values.campaign_id,
-      };
-
-      const bulkCount = values.bulk_count;
-      const bulkDiscounts: CreateDiscountData[] = Array.from({ length: bulkCount }, (_, index) => ({
-        ...baseDiscountData,
-        code: `${values.code}-${String(index + 1).padStart(4, "0")}`,
-      }));
+      }
 
       await createBulkDiscounts(bulkDiscounts);
-      message.success(`${bulkCount} discounts created successfully`);
+      message.success(`${values.bulk_count} discounts created successfully`);
       form.resetFields();
     } catch (error) {
       console.error("Error creating bulk discounts:", error);
@@ -87,7 +80,7 @@ const DiscountCreator: React.FC = () => {
         layout="vertical"
       >
         <Form.Item
-          name="code"
+          name="code_prefix"
           label="Base Discount Code"
           rules={[{ required: true, message: "Please enter a base discount code for bulk generation" }]}
         >
