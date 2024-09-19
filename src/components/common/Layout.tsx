@@ -1,10 +1,11 @@
 import React from "react";
 import { Layout, Menu, Dropdown, Avatar } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined, DashboardOutlined, RocketOutlined, GiftOutlined, AppstoreOutlined } from "@ant-design/icons";
 import { logout } from "../../api/auth";
 
 const { Header, Sider } = Layout;
+const { SubMenu } = Menu;
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -33,18 +34,25 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     <Layout style={{ minHeight: "100vh" }}>
       <Sider>
         <Menu theme="dark" mode="inline">
-          <Menu.Item key="1">
+          <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
             <Link to="/dashboard">Dashboard</Link>
           </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/campaigns">Campaigns</Link>
-          </Menu.Item>
-          <Menu.Item key="3">
+          <SubMenu key="campaigns" icon={<RocketOutlined />} title="Campaigns">
+            <Menu.Item key="campaigns-list">
+              <Link to="/campaigns">All Campaigns</Link>
+            </Menu.Item>
+            <Menu.Item key="campaign-create">
+              <Link to="/campaigns/create">Create Campaign</Link>
+            </Menu.Item>
+          </SubMenu>
+          <Menu.Item key="discounts" icon={<GiftOutlined />}>
             <Link to="/discounts">Discounts</Link>
           </Menu.Item>
-          <Menu.Item key="4">
-            <Link to="/widgets">Widgets</Link>
-          </Menu.Item>
+          <SubMenu key="widgets" icon={<AppstoreOutlined />} title="Widgets">
+            <Menu.Item key="widgets-list">
+              <Link to="/widgets">All Widgets</Link>
+            </Menu.Item>
+          </SubMenu>
         </Menu>
       </Sider>
       <Layout>

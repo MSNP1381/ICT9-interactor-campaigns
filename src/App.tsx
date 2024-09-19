@@ -14,6 +14,7 @@ import LandingPage from "./pages/LandingPage";
 import CampaignCreator from "./components/Campaigns/CampaignCreator";
 import CampaignEditor from "./components/Campaigns/CampaignEditor";
 import WidgetEditor from "./components/Widgets/WidgetEditor";
+import CampaignAnalytics from "./components/Campaigns/CampaignAnalytics";
 
 const { Content } = Layout;
 
@@ -31,6 +32,7 @@ const App: React.FC = () => {
       <Route path="/campaigns" element={<CampaignsPage />} />
       <Route path="/campaigns/create" element={<CampaignCreator />} />
       <Route path="/campaigns/:campaignId" element={<CampaignEditor />} />
+      <Route path="/campaigns/:campaignId/analytics" element={<CampaignAnalytics />} />
       <Route path="/discounts" element={<DiscountsPage />} />
       <Route path="/widgets" element={<WidgetsPage />} />
       <Route path="/widgets/edit/:widgetId" element={<WidgetEditor />} />

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudSoft - Revolutionary SaaS Solution</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .logo { font-size: 24px; font-weight: bold; }
+        nav a { margin-left: 20px; text-decoration: none; color: #333; }
+        .hero { text-align: center; margin-bottom: 60px; }
+        .cta { background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; display: inline-block; margin-top: 20px; font-size: 18px; }
+        .features { display: flex; justify-content: space-between; margin-bottom: 60px; }
+        .feature { flex: 1; margin: 0 20px; text-align: center; }
+        .testimonials { background-color: #f4f4f4; padding: 40px; border-radius: 10px; }
+        .testimonial { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">CloudSoft</div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#pricing">Pricing</a>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>CloudSoft: Revolutionize Your Workflow</h1>
+        <p>CloudSoft is the all-in-one solution for modern businesses. Streamline your processes, collaborate effortlessly, and boost productivity.</p>
+        <a href="#" class="cta" id="start-free-trial">Start Free Trial</a>
+    </div>
+
+    <div class="features" id="features">
+        <div class="feature">
+            <h2>Seamless Integration</h2>
+            <p>Easily connect with your existing tools and workflows.</p>
+        </div>
+        <div class="feature">
+            <h2>Real-time Collaboration</h2>
+            <p>Work together with your team, anytime, anywhere.</p>
+        </div>
+        <div class="feature">
+            <h2>Advanced Analytics</h2>
+            <p>Gain insights into your business with powerful reporting tools.</p>
+        </div>
+    </div>
+
+    <div class="testimonials" id="testimonials">
+        <h2>What Our Customers Say</h2>
+        <div class="testimonial">
+            <p>"CloudSoft has transformed the way we work. Our productivity has increased by 50% since we started using it."</p>
+            <strong>- John Doe, CEO of TechCorp</strong>
+        </div>
+        <div class="testimonial">
+            <p>"The customer support is outstanding. They're always there to help us get the most out of the platform."</p>
+            <strong>- Jane Smith, CTO of InnovateCo</strong>
+        </div>
+    </div>
+
+    <div id="div-widget-engage"></div>
+
+    <script src="http://192.168.1.12:3000/userTracker.js" 
+            data-campaign-id="example-campaign-id" 
+            data-widget-id="57914362-6316-4a3d-85dc-0089be43666a"
+            data-display-mode="modal"></script>
+    
+    <script>
+        document.getElementById('start-free-trial').addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Free trial button clicked');
+        });
+    </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Space, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import { ColumnsType } from "antd/es/table";
 import { getCampaigns, deleteCampaign, Campaign } from "../../api/campaigns";
-import { useNavigate } from "react-router-dom";
 
 const CampaignList: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -69,6 +69,9 @@ const CampaignList: React.FC = () => {
       render: (_, record) => (
         <Space size="middle">
           <Button onClick={() => navigate(`/campaigns/${record.id}`)}>Edit</Button>
+          <Link to={`/campaigns/${record.id}/analytics`}>
+            <Button>Analytics</Button>
+          </Link>
           <Button onClick={() => handleDelete(record.id)}>Delete</Button>
         </Space>
       ),

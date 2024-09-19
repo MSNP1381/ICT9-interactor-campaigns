@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperGadget 3000 - Buy Now!</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .product { border: 1px solid #ddd; padding: 20px; margin-top: 20px; display: flex; }
+        .product-image { flex: 1; margin-right: 20px; }
+        .product-info { flex: 2; }
+        button { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; font-size: 16px; }
+        .reviews { margin-top: 20px; }
+        .review { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>SuperGadget 3000</h1>
+    <div class="product">
+        <div class="product-image">
+            <img src="https://via.placeholder.com/300" alt="SuperGadget 3000">
+        </div>
+        <div class="product-info">
+            <h2>SuperGadget 3000</h2>
+            <p>Experience the future with SuperGadget 3000. This revolutionary device will transform your daily life with its cutting-edge features and sleek design.</p>
+            <ul>
+                <li>AI-powered personal assistant</li>
+                <li>5G connectivity</li>
+                <li>Holographic display</li>
+                <li>1 week battery life</li>
+            </ul>
+            <p><strong>Price: $999.99</strong></p>
+            <button id="buy-now">Add to Cart</button>
+        </div>
+    </div>
+    <div class="reviews">
+        <h3>Customer Reviews</h3>
+        <div class="review">
+            <h4>John D.</h4>
+            <p>This gadget has changed my life! I can't imagine going back to my old devices.</p>
+        </div>
+        <div class="review">
+            <h4>Sarah M.</h4>
+            <p>The holographic display is mind-blowing. Great battery life too!</p>
+        </div>
+    </div>
+
+    <div id="div-widget-engage"></div>
+
+    <script src="http://192.168.1.12:3000/userTracker.js" 
+            data-campaign-id="example-campaign-id" 
+            data-widget-id="57914362-6316-4a3d-85dc-0089be43666a"
+            data-display-mode="embed"></script>
+   
+    <script>
+        document.getElementById('buy-now').addEventListener('click', function() {
+            console.log('Add to Cart button clicked');
+        });
+    </script>
+</body>
+</html>
