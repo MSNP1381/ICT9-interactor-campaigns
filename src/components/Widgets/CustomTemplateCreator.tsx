@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message, Select } from "antd";
 import { createWidgetTemplate, WidgetTemplate } from "../../api/widgetTemplates";
+import { duration } from "moment";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -56,6 +57,8 @@ const CustomTemplateCreator: React.FC<CustomTemplateCreatorProps> = ({ onTemplat
         if (error.status===400){
             console.log(error);
             message.error("template is not safe ");
+        } else {
+            message.error("Failed to create custom template: " + error.response.data.detail,);
         }
       console.error("Error creating custom template:", error);
       message.error("Failed to create custom template");

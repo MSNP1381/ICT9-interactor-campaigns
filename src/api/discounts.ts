@@ -3,27 +3,12 @@ import { api } from "./config";
 export interface Discount {
   id: string;
   code: string;
-  type: string;
-  value: number;
-  start_date: string;
-  end_date: string;
-  usage_limit: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface CreateDiscountData {
-  code: string;
-  discount_value: number;
   discount_type: "percentage" | "fixed_amount" | "free_shipping";
-  max_uses?: number;
+  discount_value: number;
   expiration_date?: string;
+  max_uses?: number;
   is_active: boolean;
   campaign_id: string;
-}
-
-export interface BulkDiscountCodeCreate {
-  discount_codes: CreateDiscountData[];
 }
 
 export const getDiscounts = async () => {
@@ -31,32 +16,4 @@ export const getDiscounts = async () => {
   return response.data;
 };
 
-export const getDiscount = async (id: string) => {
-  const response = await api.get<Discount>(`/discounts/${id}`);
-  return response.data;
-};
-
-export const createDiscount = async (data: CreateDiscountData) => {
-  const response = await api.post("/discount-codes/", data);
-  return response.data;
-};
-
-export const updateDiscount = async (
-  id: string,
-  discountData: Partial<CreateDiscountData>,
-) => {
-  const response = await api.put<Discount>(`/discounts/${id}`, discountData);
-  return response.data;
-};
-
-export const deleteDiscount = async (id: string) => {
-  await api.delete(`/discounts/${id}`);
-};
-
-export const createBulkDiscounts = async (discountCodes: CreateDiscountData[]) => {
-  const bulkData: BulkDiscountCodeCreate = {
-    discount_codes: discountCodes
-  };
-  const response = await api.post<DiscountCode[]>("/discount-codes/bulk", discountCodes);
-  return response.data;
-};
+// ... other discount-related API functions
