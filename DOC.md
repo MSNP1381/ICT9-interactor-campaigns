@@ -66,6 +66,7 @@ A client-side tracking script (`public/userTracker.js`) is implemented to collec
 
 - Tracks page views, widget interactions, and other relevant user actions
 - Sends collected data to the backend for analysis
+- Implements a sophisticated fingerprinting method to identify users across sessions
 
 ## 5. Routing and Application Structure
 
@@ -133,79 +134,91 @@ Key features of `userTracker.js`:
 
 8. **Widget Interaction Handling**: Provides a global `onWidgetSubmit` function for widgets to report their specific interactions.
 
+9. **User Fingerprinting**: Implements a sophisticated method to create a unique fingerprint for each user, replacing traditional methods like MAC address or device ID.
+
+The `userTracker.js` script uses a combination of browser and hardware characteristics to create a unique fingerprint for each user. This method is necessary because traditional identification methods like MAC addresses or device IDs are no longer accessible due to privacy concerns and restrictions imposed by modern browsers and operating systems.
+
+The fingerprinting method in `userTracker.js` uses the following components:
+
+- User agent string
+- Language settings
+- Screen color depth
+- Screen resolution
+- Timezone offset
+- Available storage (session and local)
+- WebGL vendor and renderer information
+
+These components are combined and hashed to create a unique identifier that remains consistent across sessions for the same device and browser, while still respecting user privacy.
+
 Usage:
 
+To use the `userTracker.js` script, include it in your HTML file:
+
 ```html
-<script src="path/to/userTracker.js"
-data-campaign-id="your-campaign-id"
-data-widget-id="your-widget-id"
-data-display-mode="modal"></script>
+<script src="userTracker.js"></script>
 ```
 
-### 12.2 Widget Templates
+The script will automatically initialize and start tracking user interactions.
 
-The Interactive Advertising Dashboard uses a set of customizable widget templates to create engaging interactive elements for advertising campaigns. These templates are designed to be flexible and easily integrated with the `userTracker.js` script.
+### 12.2 Widget Integration
 
-#### 12.2.1 Multi-Choice Question (multi.jinja)
+The `userTracker.js` script provides a global `onWidgetSubmit` function that widgets can use to report their specific interactions. This function is triggered when a widget is submitted, allowing widgets to send additional data to the server.
 
-This template creates a multi-choice question widget with an image and customizable options.
-
-Features:
-
-- Displays a main question or title
-- Shows an optional image
-- Presents multiple choice options as buttons
-- Records the user's selection
-- Sends the selected choice to the `userTracker` when submitted
-
-#### 12.2.2 Banner (banner.jinja)
-
-A simple yet effective banner widget that can be used for various advertising purposes.
-
-Features:
-
-- Displays a clickable banner image
-- Customizable image source and alt text
-- Tracks banner clicks and reports them to the `userTracker`
-
-#### 12.2.3 Wheel of Fortune (fortune.jinja)
-
-An interactive "Wheel of Fortune" style game that engages users with a spinning wheel and prizes.
-
-Features:
-
-- Customizable wheel sectors with different colors and labels
-- Animated wheel spinning effect
-- Displays a congratulations message with the won prize
-- Reports the game result to the `userTracker`
-
-#### 12.2.4 Atari Pong Game (atari-pong-game.jinja)
-
-A classic Pong game implementation that provides an engaging, interactive experience for users.
-
-Features:
-
-- Fully functional Pong game with player vs. computer gameplay
-- Customizable game parameters (winning score, ball speed, etc.)
-- Tracks game progress and final scores
-- Reports game results to the `userTracker`
-
-### 12.3 Integration of Widgets and User Tracker
-
-The widget templates are designed to work seamlessly with the `userTracker.js` script. They utilize the `window.onWidgetSubmit` function provided by the user tracker to report specific interactions and results.
-
-For example, in the multi-choice question widget:
+To use the `onWidgetSubmit` function, widgets need to call it with the specific interaction data:
 
 ```javascript
-sendButton.addEventListener('click', () => {
-if (selectedChoice && window.onWidgetSubmit) {
-window.onWidgetSubmit({ choice: selectedChoice });
-}
+onWidgetSubmit({
+    widgetId: "your-widget-id",
+    action: "specific-action",
+    data: {
+        additionalData: "value"
+    }
 });
 ```
 
-This integration allows for consistent tracking and data collection across different widget types, providing valuable insights into user engagement and campaign performance.
+This will send the interaction data to the server, which can then be used for analysis and reporting.
 
-## 13. Conclusion
+### 12.3 Widget Templates
 
-The combination of the `userTracker.js` script and the diverse set of widget templates provides a powerful and flexible system for creating interactive advertising campaigns. This system allows for easy deployment of engaging content while collecting valuable user interaction data, enabling businesses to optimize their advertising strategies based on real-world performance metrics.
+The `userTracker.js` script supports two display modes for widgets:
+
+1. **Modal Mode**: Displays the widget in a modal dialog.
+2. **Embedded Mode**: Embeds the widget directly into the page.
+
+To specify the display mode, include the `data-display-mode` attribute in the script tag:
+
+```html
+<script src="userTracker.js" data-display-mode="modal"></script>
+```
+
+This will ensure that the widget is displayed in a modal dialog.
+
+### 12.4 Widget Templates
+
+The `userTracker.js` script supports two display modes for widgets:
+
+1. **Modal Mode**: Displays the widget in a modal dialog.
+2. **Embedded Mode**: Embeds the widget directly into the page.
+
+To specify the display mode, include the `data-display-mode` attribute in the script tag:
+
+```html
+<script src="userTracker.js" data-display-mode="modal"></script>
+```
+
+This will ensure that the widget is displayed in a modal dialog.
+
+### 12.5 Widget Templates
+
+The `userTracker.js` script supports two display modes for widgets:
+
+1. **Modal Mode**: Displays the widget in a modal dialog.
+2. **Embedded Mode**: Embeds the widget directly into the page.
+
+To specify the display mode, include the `data-display-mode` attribute in the script tag:
+
+```html
+<script src="userTracker.js" data-display-mode="modal"></script>
+```
+
+This will ensure that the widget is displayed in a modal dialog.
