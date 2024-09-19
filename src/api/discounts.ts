@@ -57,6 +57,6 @@ export const createBulkDiscounts = async (discountCodes: CreateDiscountData[]) =
   const bulkData: BulkDiscountCodeCreate = {
     discount_codes: discountCodes
   };
-  const response = await api.post<DiscountCode[]>("/discount-codes/bulk", bulkData);
+  const response = await api.post<DiscountCode[]>("/discount-codes/bulk", discountCodes);
   return response.data;
 };

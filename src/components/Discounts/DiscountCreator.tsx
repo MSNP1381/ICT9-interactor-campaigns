@@ -51,13 +51,14 @@ const DiscountCreator: React.FC = () => {
     setLoading(true);
     try {
       const bulkDiscounts:any = {
-        code: `${values.code_prefix}-`,
+        code_prefix: `${values.code_prefix}-`,
         discount_value: values.discount_value,
         discount_type: values.discount_type,
         max_uses: values.max_uses,
         expiration_date: values.expiration_date?.format("YYYY-MM-DD"),
         is_active: true,
         campaign_id: values.campaign_id,
+        count: values.bulk_count,
       }
 
       await createBulkDiscounts(bulkDiscounts);
