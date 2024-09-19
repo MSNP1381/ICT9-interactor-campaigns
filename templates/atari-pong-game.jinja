@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atari Pong</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+        }
+        #gameCanvas {
+            border: 2px solid #fff;
+            position: relative;
+        }
+        #resultPage, #countdownOverlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        #countdown {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        button {
+            margin: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+        #watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            opacity: {{ watermark_opacity|default(0.1) }};
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div id="watermark">{{ watermark_text|default('ATARI PONG') }}</div>
+    </div>
+    <div id="countdownOverlay">
+        <div id="countdown"></div>
+    </div>
+    <div id="resultPage">
+        <h2 id="resultText"></h2>
+        <p id="resultMessage">{{ result_message|default('Thanks for playing!') }}</p>
+        <button id="retryButton">Retry</button>
+        <button id="sendResultButton">Send Result</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const resultPage = document.getElementById('resultPage');
+        const resultText = document.getElementById('resultText');
+        const resultMessage = document.getElementById('resultMessage');
+        const retryButton = document.getElementById('retryButton');
+        const sendResultButton = document.getElementById('sendResultButton');
+        const countdownOverlay = document.getElementById('countdownOverlay');
+        const countdownElement = document.getElementById('countdown');
+
+        // Game variables
+        let playerScore = 0;
+        let botScore = 0;
+        const winningScore = 5;
+        let gameStarted = false;
+
+        const paddle = {
+            width: 10,
+            height: 100,
+            playerY: 150,
+            botY: 150
+        };
+
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 5,
+            speed: 7,
+            dx: 5,
+            dy: 3
+        };
+
+        function drawPaddles() {
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, paddle.playerY, paddle.width, paddle.height);
+            ctx.fillRect(canvas.width - paddle.width, paddle.botY, paddle.width, paddle.height);
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawScore() {
+            ctx.font = '30px Arial';
+            ctx.fillText(playerScore, canvas.width / 4, 50);
+            ctx.fillText(botScore, 3 * canvas.width / 4, 50);
+        }
+
+        function moveBall() {
+            if (!gameStarted) return;
+
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            // Top and bottom collision
+            if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+                ball.dy = -ball.dy;
+            }
+
+            // Paddle collision
+            if (ball.dx < 0) {
+                // Player's paddle
+                if (ball.x - ball.radius < paddle.width &&
+                    ball.y > paddle.playerY &&
+                    ball.y < paddle.playerY + paddle.height) {
+                    handlePaddleHit(paddle.playerY);
+                }
+            } else {
+                // Bot's paddle
+                if (ball.x + ball.radius > canvas.width - paddle.width &&
+                    ball.y > paddle.botY &&
+                    ball.y < paddle.botY + paddle.height) {
+                    handlePaddleHit(paddle.botY);
+                }
+            }
+
+            // Score
+            if (ball.x + ball.radius > canvas.width) {
+                playerScore++;
+                resetBall(false);
+            } else if (ball.x - ball.radius < 0) {
+                botScore++;
+                resetBall(true);
+            }
+        }
+
+        function handlePaddleHit(paddleY) {
+            // Calculate where the ball hit the paddle
+            const hitPos = (ball.y - paddleY) / paddle.height;
+
+            // Change angle based on where the ball hit the paddle
+            const angle = (hitPos - 0.5) * Math.PI / 3; // Max angle: 60 degrees
+
+            // Calculate new velocity
+            ball.dx = -ball.dx;
+            ball.dy = ball.speed * Math.sin(angle);
+
+            // Ensure the ball is moving at a constant speed
+            const currentSpeed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+            ball.dx = (ball.dx / currentSpeed) * ball.speed;
+            ball.dy = (ball.dy / currentSpeed) * ball.speed;
+
+            // Slightly increase ball speed
+            ball.speed *= 1.05;
+        }
+
+        function resetBall(movingRight) {
+            // Random position along the center vertical line
+            ball.x = canvas.width / 2;
+            ball.y = Math.random() * (canvas.height - 100) + 50; // Keep away from edges
+
+            ball.speed = 7;
+            
+            // Random angle between -45 and 45 degrees
+            const angle = (Math.random() - 0.5) * Math.PI / 2;
+            
+            // Set direction based on who scored
+            const direction = movingRight ? 1 : -1;
+            
+            ball.dx = direction * ball.speed * Math.cos(angle);
+            ball.dy = ball.speed * Math.sin(angle);
+
+            // Stop the ball and set a delay before starting
+            gameStarted = false;
+            setTimeout(delayedStart, 1000);
+        }
+
+        function delayedStart() {
+            gameStarted = true;
+        }
+
+        function moveBot() {
+            if (!gameStarted) return;
+
+            const botCenter = paddle.botY + paddle.height / 2;
+            if (botCenter < ball.y - 35) {
+                paddle.botY += 4;
+            } else if (botCenter > ball.y + 35) {
+                paddle.botY -= 4;
+            }
+        }
+
+        function checkGameEnd() {
+            if (playerScore >= winningScore || botScore >= winningScore) {
+                canvas.style.display = 'none';
+                resultPage.style.display = 'block';
+                resultText.textContent = playerScore > botScore ? 'You Win!' : 'Bot Wins!';
+                gameStarted = false;
+            }
+        }
+
+        function startCountdown() {
+            let count = 3;
+            countdownOverlay.style.display = 'block';
+            countdownElement.textContent = count;
+
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownElement.textContent = count;
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownOverlay.style.display = 'none';
+                    gameStarted = true;
+                }
+            }, 1000);
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPaddles();
+            drawBall();
+            drawScore();
+            moveBall();
+            moveBot();
+            checkGameEnd();
+
+            if (playerScore < winningScore && botScore < winningScore) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            paddle.playerY = e.clientY - rect.top - paddle.height / 2;
+        });
+
+        retryButton.addEventListener('click', () => {
+            playerScore = 0;
+            botScore = 0;
+            resetBall(Math.random() < 0.5);
+            canvas.style.display = 'block';
+            resultPage.style.display = 'none';
+            startCountdown();
+            gameLoop();
+        });
+
+        sendResultButton.addEventListener('click', () => {
+            if (window.onWidgetSubmit) {
+                window.onWidgetSubmit({ 
+                    playerScore,
+                    botScore,
+                    result: playerScore > botScore ? 'win' : 'lose'
+                });
+            }
+        });
+
+        startCountdown();
+        gameLoop();
+    </script>
+</body>
+</html>

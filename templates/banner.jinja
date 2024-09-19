@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default("Banner") }}</title>
+    <style>
+        .banner {
+            max-width: 100%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ image_url|default('https://newsmedia.tasnimnews.com/Tasnim/Uploaded/Image/1400/02/05/1400020513492962722629634.jpg') }}" alt="{{ title|default('Banner') }}" class="banner" id="bannerImage">
+
+    <script>
+        const banner = document.getElementById('bannerImage');
+
+        banner.addEventListener('click', () => {
+            if (window.onWidgetSubmit) {
+                window.onWidgetSubmit({ clicked: true });
+            }
+        });
+    </script>
+</body>
+</html>

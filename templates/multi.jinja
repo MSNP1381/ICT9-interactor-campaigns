@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default("Multi-choice Question") }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #content {
+            display: flex;
+            gap: 20px;
+        }
+        #image {
+            flex: 1;
+        }
+        #choices {
+            flex: 2;
+            justify-content:center;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .choice {
+            display: block;
+            margin: 0;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .choice:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        #sendButton {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #e74c3c;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        #sendButton:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ title|default("Multi-choice Question") }}</h1>
+    <div id="content">
+        <div id="image">
+            <img src="{{ image_url|default('https://via.placeholder.com/400') }}" alt="Question Image" style="max-width: 100%; border-radius: 8px;">
+        </div>
+        <div id="choices">
+            <p>{{ question|default("Please select one of the following choices:") }}</p>
+            {% for choice in choices %}
+                <button class="choice" data-value="{{ choice }}">{{ choice }}</button>
+            {% endfor %}
+        </div>
+    </div>
+    <p id="result"></p>
+    <button id="sendButton">Send</button>
+
+    <script>
+        const choices = document.querySelectorAll('.choice');
+        const result = document.getElementById('result');
+        const sendButton = document.getElementById('sendButton');
+        let selectedChoice = null;
+
+        choices.forEach(choice => {
+            choice.addEventListener('click', () => {
+                selectedChoice = choice.dataset.value;
+                result.textContent = `You selected: ${selectedChoice}`;
+                result.style.backgroundColor = '#2ecc71';
+                result.style.color = 'white';
+                
+                choices.forEach(btn => btn.style.opacity = '0.7');
+                choice.style.opacity = '1';
+                choice.style.backgroundColor = '#2ecc71';
+
+                sendButton.style.display = 'block';
+            });
+        });
+
+        sendButton.addEventListener('click', () => {
+            if (selectedChoice && window.onWidgetSubmit) {
+                window.onWidgetSubmit({ choice: selectedChoice });
+            }
+        });
+    </script>
+    <script src="/static/scripts/userTracker.js"></script>
+</body>
+</html>

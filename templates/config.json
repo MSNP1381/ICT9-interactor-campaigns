@@ -1,0 +1,40 @@
+[
+  {
+    "template_name": "fortune",
+    "variables": {
+      "sectors": [
+        { "color": "#f82", "label": "Stack" },
+        { "color": "#0bf", "label": "10" },
+        { "color": "#fb0", "label": "200" },
+        { "color": "#0fb", "label": "50" },
+        { "color": "#b0f", "label": "100" },
+        { "color": "#f0b", "label": "5" },
+        { "color": "#bf0", "label": "500" }
+      ]
+    }
+  },
+  {
+    "template_name": "multi",
+    "variables": {
+      "title": "SIMPLE MULTI CHOICE QUESTION",
+      "image_url": "https://via.placeholder.com/400",
+      "choices": ["C1", "C2", "C3", "C4"],
+      "question": "Please select one of the following choices"
+    }
+  },
+  {
+    "template_name": "banner",
+    "variables": {
+      "image_url": "https://via.placeholder.com/400",
+      "title": "Banner"
+    }
+  },
+  {
+    "template_name": "pong",
+    "variables": {
+      "watermark_opacity": 0.5,
+      "watermark_text": "PONG",
+      "result_message": "SNAPP GOOLYY!!!"
+    }
+  }
+]

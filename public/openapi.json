@@ -1,0 +1,433 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "FastAPI", "version": "0.1.0" },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/api/v1/widgets": {
+      "post": {
+        "summary": "Create Widget",
+        "operationId": "create_widget_api_v1_widgets_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WidgetCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Widget" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "APIKeyHeader": [] }]
+      }
+    },
+    "/api/v1/widgets/{widget_id}": {
+      "put": {
+        "summary": "Update Widget",
+        "operationId": "update_widget_api_v1_widgets__widget_id__put",
+        "security": [{ "APIKeyHeader": [] }],
+        "parameters": [
+          {
+            "name": "widget_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Widget Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WidgetUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Widget" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Widget",
+        "operationId": "delete_widget_api_v1_widgets__widget_id__delete",
+        "security": [{ "APIKeyHeader": [] }],
+        "parameters": [
+          {
+            "name": "widget_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Widget Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/widgets/{widget_id}/interactions": {
+      "post": {
+        "summary": "Create Widget Interaction",
+        "operationId": "create_widget_interaction_api_v1_widgets__widget_id__interactions_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WidgetInteractionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WidgetInteraction" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get Widget Interactions",
+        "operationId": "get_widget_interactions_api_v1_widgets__widget_id__interactions_get",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "widget_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Widget Id"
+            }
+          },
+          {
+            "name": "client_reference_id",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "title": "Client Reference Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/WidgetInteraction" },
+                  "title": "Response Get Widget Interactions Api V1 Widgets  Widget Id  Interactions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/widgets/{widget_id}/html": {
+      "get": {
+        "summary": "Get Widget Html",
+        "operationId": "get_widget_html_api_v1_widgets__widget_id__html_get",
+        "parameters": [
+          {
+            "name": "widget_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Widget Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "text/html": { "schema": { "type": "string" } } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      },
+      "Widget": {
+        "properties": {
+          "_id": {
+            "anyOf": [
+              { "type": "string", "example": "5eb7cf5a86d9755df3a6c593" },
+              { "type": "null" }
+            ],
+            "title": " Id",
+            "description": "MongoDB document ObjectID"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At",
+            "default": "2024-09-19T00:27:18.915804"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At",
+            "default": "2024-09-19T00:27:18.915827"
+          },
+          "widget_id": {
+            "type": "string",
+            "format": "uuid4",
+            "title": "Widget Id"
+          },
+          "host_id": {
+            "type": "string",
+            "format": "uuid4",
+            "title": "Host Id"
+          },
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid4",
+            "title": "Campaign Id"
+          },
+          "body": { "type": "string", "title": "Body" },
+          "config": { "type": "object", "title": "Config" }
+        },
+        "type": "object",
+        "required": ["widget_id", "host_id", "campaign_id", "body", "config"],
+        "title": "Widget"
+      },
+      "WidgetCreate": {
+        "properties": {
+          "widget_id": {
+            "type": "string",
+            "format": "uuid4",
+            "title": "Widget Id"
+          },
+          "host_id": {
+            "type": "string",
+            "format": "uuid4",
+            "title": "Host Id"
+          },
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid4",
+            "title": "Campaign Id"
+          },
+          "body": { "type": "string", "title": "Body" },
+          "config": { "type": "object", "title": "Config" }
+        },
+        "type": "object",
+        "required": ["widget_id", "host_id", "campaign_id", "body", "config"],
+        "title": "WidgetCreate"
+      },
+      "WidgetInteraction": {
+        "properties": {
+          "_id": {
+            "anyOf": [
+              { "type": "string", "example": "5eb7cf5a86d9755df3a6c593" },
+              { "type": "null" }
+            ],
+            "title": " Id",
+            "description": "MongoDB document ObjectID"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At",
+            "default": "2024-09-19T00:27:18.915804"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At",
+            "default": "2024-09-19T00:27:18.915827"
+          },
+          "widget_id": {
+            "type": "string",
+            "format": "uuid4",
+            "title": "Widget Id"
+          },
+          "client_refrence_id": {
+            "type": "string",
+            "title": "Client Refrence Id"
+          },
+          "ref_url": { "type": "string", "title": "Ref Url" },
+          "interaction_type": {
+            "$ref": "#/components/schemas/WidgetInteractionType"
+          },
+          "interaction_data": { "type": "object", "title": "Interaction Data" }
+        },
+        "type": "object",
+        "required": [
+          "widget_id",
+          "client_refrence_id",
+          "ref_url",
+          "interaction_type",
+          "interaction_data"
+        ],
+        "title": "WidgetInteraction"
+      },
+      "WidgetInteractionCreate": {
+        "properties": {
+          "widget_id": {
+            "type": "string",
+            "format": "uuid4",
+            "title": "Widget Id"
+          },
+          "client_refrence_id": {
+            "type": "string",
+            "title": "Client Refrence Id"
+          },
+          "ref_url": { "type": "string", "title": "Ref Url" },
+          "interaction_type": { "type": "string", "title": "Interaction Type" },
+          "interaction_data": { "type": "object", "title": "Interaction Data" }
+        },
+        "type": "object",
+        "required": [
+          "widget_id",
+          "client_refrence_id",
+          "ref_url",
+          "interaction_type",
+          "interaction_data"
+        ],
+        "title": "WidgetInteractionCreate"
+      },
+      "WidgetInteractionType": {
+        "type": "string",
+        "enum": ["click", "submit", "change", "game_score", "other"],
+        "title": "WidgetInteractionType"
+      },
+      "WidgetUpdate": {
+        "properties": {
+          "body": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Body"
+          },
+          "config": {
+            "anyOf": [{ "type": "object" }, { "type": "null" }],
+            "title": "Config"
+          }
+        },
+        "type": "object",
+        "title": "WidgetUpdate"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": { "type": "apiKey", "in": "header", "name": "X-API-Key" },
+      "OAuth2PasswordBearer": {
+        "type": "oauth2",
+        "flows": { "password": { "scopes": {}, "tokenUrl": "token" } }
+      }
+    }
+  }
+}
