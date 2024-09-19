@@ -58,7 +58,7 @@ const CustomTemplateCreator: React.FC<CustomTemplateCreatorProps> = ({ onTemplat
             console.log(error);
             message.error("template is not safe ");
         } else {
-            message.error("Failed to create custom template: " + error.response.data.detail,);
+            message.error("Failed to create custom template: " + error.response.data.detail, 5);
         }
       console.error("Error creating custom template:", error);
       message.error("Failed to create custom template");
