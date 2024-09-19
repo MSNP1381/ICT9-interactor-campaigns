@@ -5,6 +5,7 @@
     widgetId: null,
     campaignId: null,
     displayMode: 'modal',
+    baseUrl: 'http://192.168.1.15:9000',
 
     init({ campaignId, widgetId, displayMode = 'modal' }) {
       this.startTime = new Date();
@@ -139,7 +140,7 @@
       
       widgetContainer.innerHTML = '';
       
-      fetch(`http://192.168.1.15:9000/api/v1/widgets/${widgetId}/html`)
+      fetch(`${this.baseUrl}/api/v1/widgets/${widgetId}/html`)
         .then(response => response.text())
         .then(html => {
           widgetContainer.innerHTML = html;
@@ -221,7 +222,7 @@
       console.log("Sending tracking data:", data);
 
       try {
-        const response = await fetch(`http://192.168.1.15:9000/api/v1/widgets/${this.widgetId}/interactions`, {
+        const response = await fetch(`${this.baseUrl}/api/v1/widgets/${this.widgetId}/interactions`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
@@ -251,7 +252,7 @@
       console.log("Sending widget interaction data:", data);
 
       try {
-        const response = await fetch(`http://192.168.1.15:9000/api/v1/widgets/${this.widgetId}/interactions`, {
+        const response = await fetch(`${this.baseUrl}/api/v1/widgets/${this.widgetId}/interactions`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
