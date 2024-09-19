@@ -18,9 +18,13 @@
         const banner = document.getElementById('bannerImage');
 
         banner.addEventListener('click', () => {
-            if (window.onWidgetSubmit) {
-                window.onWidgetSubmit({ clicked: true });
-            }
+                      const widgetSubmitEvent = new CustomEvent('widgetSubmit', {
+                detail: {
+                 clicked: true 
+                }
+            });
+            window.dispatchEvent(widgetSubmitEvent);
+ 
         });
     </script>
 </body>

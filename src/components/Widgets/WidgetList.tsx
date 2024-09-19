@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Space, message, Modal, Input } from "antd";
+import { Table, Button, Space, message, Modal, Input, Popconfirm } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { getWidgets, Widget } from "../../api/widgets";
+import { getWidgets, Widget, deleteWidget } from "../../api/widgets";
 import { useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
+
+interface WidgetListProps {
+  refreshTrigger: number;
+}
 
 const WidgetList: React.FC<WidgetListProps> = ({ refreshTrigger }) => {
   const [widgets, setWidgets] = useState<Widget[]>([]);
@@ -29,8 +33,20 @@ const WidgetList: React.FC<WidgetListProps> = ({ refreshTrigger }) => {
       setLoading(false);
     }
   };
+
+  const handleDeleteWidget = async (widgetId:string) => {
+    try {
+      await deleteWidget(widgetId);
+      message.success("Widget deleted successfully");
+      fetchWidgets();
+    } catch (error) {
+      console.error("Error deleting widget:", error);
+      message.error("Failed to delete widget");
+    }
+  };
+
   const showEmbedCode = (widget: Widget) => {
-    const trackerScript = `<script src="${import.meta.env.VITE_TRACKER_URL}" data-campaign-id="${widget.campaign_id}" data-widget-id="${widget.id}"></script>`;
+    const trackerScript = `<script src="${import.meta.env.VITE_TRACKER_URL}" data-campaign-id="${widget.campaign_id}" data-widget-id="${widget.id}" data-display-mode="embed"></script>`;
     setEmbedCode(trackerScript);
     setEmbedModalVisible(true);
   };
@@ -63,6 +79,14 @@ const WidgetList: React.FC<WidgetListProps> = ({ refreshTrigger }) => {
         <Space size="middle">
           <Button onClick={() => navigate(`/widgets/edit/${record.id}`)}>Edit</Button>
           <Button onClick={() => showEmbedCode(record)}>Embed</Button>
+          <Popconfirm
+            title="Are you sure you want to delete this widget?"
+            onConfirm={() => handleDeleteWidget(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger>Delete</Button>
+          </Popconfirm>
         </Space>
       ),
     },

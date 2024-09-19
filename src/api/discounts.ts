@@ -12,7 +12,13 @@ export interface Discount {
 }
 
 export const getDiscounts = async () => {
-  const response = await api.get<Discount[]>("/discounts");
+  const response = await api.get<Discount[]>("/discount-codes/");
+  return response.data;
+};
+
+// Add the createBulkDiscounts function
+export const createBulkDiscounts = async (bulkDiscounts: any) => {
+  const response = await api.post<Discount[]>("/discount-codes/bulk", bulkDiscounts);
   return response.data;
 };
 

@@ -177,10 +177,12 @@ body {
       })
 
       document.getElementById('sendToServer').addEventListener('click', () => {
+
         const sector = sectors[getIndex()]
-        if (window.onWidgetSubmit) {
-          window.onWidgetSubmit({ result: sector.label });
-        }
+        const widgetSubmitEvent = new CustomEvent('widgetSubmit', {
+          detail: { result: sector.label }
+      });
+      window.dispatchEvent(widgetSubmitEvent);
       })
     }
 

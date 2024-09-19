@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atari Pong</title>
     <style>
-        body {
+        .atari-pong-game {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -15,11 +15,12 @@
             background-color: #000;
             color: #fff;
         }
-        #gameCanvas {
+        .atari-pong-game__canvas {
             border: 2px solid #fff;
             position: relative;
         }
-        #resultPage, #countdownOverlay {
+        .atari-pong-game__result-page,
+        .atari-pong-game__countdown-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -30,16 +31,16 @@
             padding: 20px;
             border-radius: 10px;
         }
-        #countdown {
+        .atari-pong-game__countdown {
             font-size: 48px;
             font-weight: bold;
         }
-        button {
+        .atari-pong-game__button {
             margin: 10px;
             padding: 5px 10px;
             font-size: 16px;
         }
-        #watermark {
+        .atari-pong-game__watermark {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -51,30 +52,32 @@
     </style>
 </head>
 <body>
-    <div id="game">
-        <canvas id="gameCanvas" width="800" height="400"></canvas>
-        <div id="watermark">{{ watermark_text|default('ATARI PONG') }}</div>
-    </div>
-    <div id="countdownOverlay">
-        <div id="countdown"></div>
-    </div>
-    <div id="resultPage">
-        <h2 id="resultText"></h2>
-        <p id="resultMessage">{{ result_message|default('Thanks for playing!') }}</p>
-        <button id="retryButton">Retry</button>
-        <button id="sendResultButton">Send Result</button>
+    <div class="atari-pong-game">
+        <div id="game">
+            <canvas id="gameCanvas" class="atari-pong-game__canvas" width="800" height="400"></canvas>
+            <div id="watermark" class="atari-pong-game__watermark">{{ watermark_text|default('ATARI PONG') }}</div>
+        </div>
+        <div id="countdownOverlay" class="atari-pong-game__countdown-overlay">
+            <div id="countdown" class="atari-pong-game__countdown"></div>
+        </div>
+        <div id="resultPage" class="atari-pong-game__result-page">
+            <h2 id="resultText"></h2>
+            <p id="resultMessage">{{ result_message|default('Thanks for playing!') }}</p>
+            <button id="retryButton" class="atari-pong-game__button">Retry</button>
+            <button id="sendResultButton" class="atari-pong-game__button">Send Result</button>
+        </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
+        const canvas = document.querySelector('.atari-pong-game__canvas');
         const ctx = canvas.getContext('2d');
-        const resultPage = document.getElementById('resultPage');
-        const resultText = document.getElementById('resultText');
-        const resultMessage = document.getElementById('resultMessage');
-        const retryButton = document.getElementById('retryButton');
+        const resultPage = document.querySelector('.atari-pong-game__result-page');
+        const resultText = document.querySelector('.atari-pong-game__result-page h2');
+        const resultMessage = document.querySelector('.atari-pong-game__result-page p');
+        const retryButton = document.querySelector('.atari-pong-game__button:nth-child(3)');
         const sendResultButton = document.getElementById('sendResultButton');
-        const countdownOverlay = document.getElementById('countdownOverlay');
-        const countdownElement = document.getElementById('countdown');
+        const countdownOverlay = document.querySelector('.atari-pong-game__countdown-overlay');
+        const countdownElement = document.querySelector('.atari-pong-game__countdown');
 
         // Game variables
         let playerScore = 0;
@@ -268,13 +271,14 @@
         });
 
         sendResultButton.addEventListener('click', () => {
-            if (window.onWidgetSubmit) {
-                window.onWidgetSubmit({ 
+            const widgetSubmitEvent = new CustomEvent('widgetSubmit', {
+                detail: {
                     playerScore,
                     botScore,
                     result: playerScore > botScore ? 'win' : 'lose'
-                });
-            }
+                }
+            });
+            document.dispatchEvent(widgetSubmitEvent);
         });
 
         startCountdown();

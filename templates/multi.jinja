@@ -115,11 +115,14 @@
         });
 
         sendButton.addEventListener('click', () => {
-            if (selectedChoice && window.onWidgetSubmit) {
-                window.onWidgetSubmit({ choice: selectedChoice });
-            }
+            const widgetSubmitEvent = new CustomEvent('widgetSubmit', {
+                detail: 
+                    { choice: selectedChoice }
+                
+            });
+            window.dispatchEvent(widgetSubmitEvent);
+ 
         });
     </script>
-    <script src="/static/scripts/userTracker.js"></script>
 </body>
 </html>

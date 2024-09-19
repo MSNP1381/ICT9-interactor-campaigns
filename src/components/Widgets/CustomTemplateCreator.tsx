@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Form, Input, Button, message, Select } from "antd";
-import { createWidgetTemplate, WidgetTemplate } from "../../api/widgetTemplates";
-import { duration } from "moment";
+import { Form, Input, Button, message, Select, Spin } from "antd";
+import { createWidgetTemplate, WidgetTemplate, createGenAIReq } from "../../api/widgetTemplates";
+// import { duration } from "moment";
+// import axios from "axios";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -18,9 +19,15 @@ const CustomTemplateCreator: React.FC<CustomTemplateCreatorProps> = ({ onTemplat
   const [form] = Form.useForm();
   const [customTemplate, setCustomTemplate] = useState<string>("");
   const [extractedVariables, setExtractedVariables] = useState<string[]>([]);
+  const [aiPrompt, setAiPrompt] = useState<string>("");
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const handleCustomTemplateChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCustomTemplate(e.target.value);
+  };
+
+  const handleAiPromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAiPrompt(e.target.value);
   };
 
   const extractVariables = () => {
@@ -33,6 +40,20 @@ const CustomTemplateCreator: React.FC<CustomTemplateCreatorProps> = ({ onTemplat
     }
 
     setExtractedVariables(Array.from(variables));
+  };
+
+  const generateTemplateWithAI = async () => {
+    setIsGenerating(true);
+    try {
+      const response = await createGenAIReq({ 'prompt': aiPrompt });
+      setCustomTemplate(response.template);
+      message.success("Template generated successfully");
+    } catch (error) {
+      console.error("Error generating template with AI:", error);
+      message.error("Failed to generate template with AI");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleCreateCustomTemplate = async () => {
@@ -85,6 +106,19 @@ const CustomTemplateCreator: React.FC<CustomTemplateCreatorProps> = ({ onTemplat
           onChange={handleCustomTemplateChange}
           placeholder="Enter your custom Jinja2 template here"
         />
+      </Form.Item>
+      <Form.Item label="Generate with AI">
+        <TextArea
+          rows={3}
+          value={aiPrompt}
+          onChange={handleAiPromptChange}
+          placeholder="Enter a prompt for AI-generated template"
+        />
+        <Spin spinning={isGenerating}>
+          <Button onClick={generateTemplateWithAI} style={{ marginTop: 8 }} disabled={isGenerating}>
+            {isGenerating ? "Generating..." : "Generate Template"}
+          </Button>
+        </Spin>
       </Form.Item>
       <Form.Item
         name="widget_type"

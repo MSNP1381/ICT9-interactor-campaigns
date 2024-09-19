@@ -911,7 +911,13 @@
             "name": "host_id",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "format": "uuid", "title": "Host Id" }
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ],
+              "title": "Host Id"
+            }
           }
         ],
         "responses": {
@@ -1637,8 +1643,7 @@
             "format": "uuid4",
             "title": "Campaign Id"
           },
-          "id": { "type": "string", "format": "uuid4", "title": "Id" },
-          "host_id": { "type": "string", "format": "uuid4", "title": "Host Id" }
+          "id": { "type": "string", "format": "uuid4", "title": "Id" }
         },
         "type": "object",
         "required": [
@@ -1646,8 +1651,7 @@
           "discount_value",
           "discount_type",
           "campaign_id",
-          "id",
-          "host_id"
+          "id"
         ],
         "title": "DiscountCode"
       },
@@ -1876,6 +1880,11 @@
             "format": "uuid4",
             "title": "Host Id"
           },
+          "campaign_id": {
+            "type": "string",
+            "format": "uuid4",
+            "title": "Campaign Id"
+          },
           "widget_template_id": {
             "type": "string",
             "format": "uuid4",
@@ -1883,7 +1892,14 @@
           }
         },
         "type": "object",
-        "required": ["name", "config", "id", "host_id", "widget_template_id"],
+        "required": [
+          "name",
+          "config",
+          "id",
+          "host_id",
+          "campaign_id",
+          "widget_template_id"
+        ],
         "title": "Widget"
       },
       "WidgetCreate": {
