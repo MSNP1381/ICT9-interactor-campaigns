@@ -209,7 +209,7 @@
         this.trackAction("widgetSubmit", { widgetId: this.widgetId });
         this.sendData("widget_submit"); // Changed from "submit" to "widget_submit"
       });
-
+      if (this.displayMode==="modal"){
       // Add close modal button
       const closeModalButton = document.createElement("button");
       closeModalButton.textContent = "Close";
@@ -241,6 +241,7 @@
         }
       };
       this.modalContent.appendChild(closeModalButton);
+    }
     },
 
     async getDeviceId() {

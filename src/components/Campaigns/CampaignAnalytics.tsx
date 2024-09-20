@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, Row, Col, Statistic, Table, Typography, Progress, Spin } from 'antd';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { getCampaign } from '../../api/campaigns';
-import { getCampaignAnalytics } from '../../api/analytics';
 import { UserOutlined, InteractionOutlined, BarChartOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
@@ -21,6 +19,45 @@ interface CampaignAnalytics {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
+// Mock data
+const mockCampaign = {
+  id: '1',
+  name: 'Summer Sale Campaign'
+};
+
+const mockAnalytics: CampaignAnalytics = {
+  totalInteractions: 15000,
+  uniqueUsers: 7500,
+  widgetInteractions: {
+    'Discount Wheel': 5000,
+    'Product Quiz': 4000,
+    'Feedback Form': 3000,
+    'Newsletter Signup': 3000
+  },
+  dailyInteractions: [
+    { date: '2023-05-01', interactions: 450 },
+    { date: '2023-05-02', interactions: 520 },
+    { date: '2023-05-03', interactions: 600 },
+    { date: '2023-05-04', interactions: 580 },
+    { date: '2023-05-05', interactions: 700 },
+    { date: '2023-05-06', interactions: 750 },
+    { date: '2023-05-07', interactions: 800 }
+  ],
+  conversionRate: 12.5,
+  averageEngagementTime: 45.3,
+  deviceBreakdown: [
+    { device: 'Mobile', percentage: 0.65 },
+    { device: 'Desktop', percentage: 0.30 },
+    { device: 'Tablet', percentage: 0.05 }
+  ],
+  topPerformingWidgets: [
+    { name: 'Discount Wheel', interactions: 5000 },
+    { name: 'Product Quiz', interactions: 4000 },
+    { name: 'Feedback Form', interactions: 3000 },
+    { name: 'Newsletter Signup', interactions: 3000 }
+  ]
+};
+
 const CampaignAnalytics: React.FC = () => {
   const { campaignId } = useParams<{ campaignId: string }>();
   const [campaign, setCampaign] = useState<any>(null);
@@ -28,19 +65,12 @@ const CampaignAnalytics: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Simulate API call delay
     const fetchData = async () => {
-      try {
-        const [campaignData, analyticsData] = await Promise.all([
-          getCampaign(campaignId!),
-          getCampaignAnalytics(campaignId!)
-        ]);
-        setCampaign(campaignData);
-        setAnalytics(analyticsData);
-      } catch (error) {
-        console.error('Error fetching campaign data:', error);
-      } finally {
-        setLoading(false);
-      }
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setCampaign(mockCampaign);
+      setAnalytics(mockAnalytics);
+      setLoading(false);
     };
 
     fetchData();

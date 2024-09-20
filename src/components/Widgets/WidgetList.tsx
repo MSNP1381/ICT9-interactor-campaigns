@@ -46,7 +46,7 @@ const WidgetList: React.FC<WidgetListProps> = ({ refreshTrigger }) => {
   };
 
   const showEmbedCode = (widget: Widget) => {
-    const trackerScript = `<script src="${import.meta.env.VITE_TRACKER_URL}" data-campaign-id="${widget.campaign_id}" data-widget-id="${widget.id}" data-display-mode="embed"></script>`;
+    const trackerScript = `<script src="${import.meta.env.VITE_TRACKER_URL}" data-campaign-id="${widget.campaign_id}" data-widget-id="${widget.id}" data-display-mode="modal" client-reference-id="1234567890"></script>`;
     setEmbedCode(trackerScript);
     setEmbedModalVisible(true);
   };

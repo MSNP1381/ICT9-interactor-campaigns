@@ -22,6 +22,8 @@ const CampaignCreator: React.FC = () => {
         end_date: values.dateRange[1].format("YYYY-MM-DD"),
         status: values.status,
         type: values.type,
+        widget_id: values.widget_id, // Add this line
+        script_tag: values.script_tag, // Add this line
       };
 
       await createCampaign(campaignData);
@@ -85,6 +87,20 @@ const CampaignCreator: React.FC = () => {
           <Option value="content_marketing">Content Marketing</Option>
           <Option value="event">Event</Option>
         </Select>
+      </Form.Item>
+      <Form.Item
+        name="widget_id"
+        label="Widget ID"
+        rules={[{ required: true, message: "Please enter a widget ID" }]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="script_tag"
+        label="Script Tag"
+        rules={[{ required: true, message: "Please enter a script tag" }]}
+      >
+        <Input />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={loading}>
